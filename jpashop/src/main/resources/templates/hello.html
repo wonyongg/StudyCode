@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="'안녕' + ${data}" >안녕하세요. 손님</p>
+<!--Build -> Recompile로 이 문서만 리컴파일 할 수 있다.
+devtools를 빌드 그래들에 추가하고 이 기능을 이용해서 굳이 서버를 재시작 할 필요없이 변경사항을 즉각 반영할 수 있다.-->
+</body>
+</html>

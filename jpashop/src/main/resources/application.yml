@@ -1,0 +1,22 @@
+
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/jpashop;
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create # 애플리케이션을 실행할 때 가존 테이블을 지우고 엔티티를 읽어 새로운 테이블을 자동으로 생성한다.
+
+    properties:
+      hibernate:
+        show_sql: true # jpa나 hibernate가 만들어 내는 sql문을 System.out으로 출력한다. 실제 개발을 진행할 때는 system.out으로 로그를 찍지 않으므로 false로 설정해둔다.
+        format_sql: true
+
+
+logging:
+  level:
+    org.hibernate.sql : debug # jpa와 hibernate가 만들어내는 sql문을 로그에 남긴다.
+    org.hibernate.type : trace # 쿼리 파라미터 로그 남기기 방법 1
