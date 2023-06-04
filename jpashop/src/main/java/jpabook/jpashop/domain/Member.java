@@ -11,11 +11,11 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
+@Setter // 실무에서 엔티티에 setter 쓰지 않는다.
 public class Member {
     @Id
     @GeneratedValue
-    @Column(name = "memver_id")
+    @Column(name = "member_id") // 어디 소속인지 명확하게 표시하는 것이 좋기 때문에 id 보다는 member_id로 쓴다.
     private Long id;
 
     private String name;
