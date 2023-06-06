@@ -7,12 +7,14 @@ import reportWebVitals from './reportWebVitals';
 // import Library from './chapter_03/Library';
 // import Library from './chapter_04/Library';
 // import CommentList from './chapter_05/CommentList';
-import NotificationList from './chapter_06/NotificationList';
+// import NotificationList from './chapter_06/NotificationList';
+import Accommodate from './chapter_07/Accommodate';
 
-const root = ReactDOM.createRoot(document.getElementById('root')); // 리액트 18버전부터 렌더링 코딩 방식이 바뀜
+const root = ReactDOM.createRoot(document.getElementById('root')); 
+// 리액트 18버전부터 렌더링 코딩 방식이 바뀜
 root.render(
   <React.StrictMode>
-    <NotificationList />
+    <Accommodate />
   </React.StrictMode>
 );
 
