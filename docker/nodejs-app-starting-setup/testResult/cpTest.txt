@@ -1,0 +1,10 @@
+this is docker cp test!!!
+
+
+----- Result -----
+docker cp cpTest/. jolly_mclaren:/cpTestDocker
+Successfully copied 2.56kB to jolly_mclaren:/cpTestDocker
+------------------
+docker cp jolly_mclaren:/cpTestDocker testResult
+Successfully copied 2.56kB to /Users/사용자경로/nodejs-app-starting-setup/testResult
+------------------
