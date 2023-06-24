@@ -20,6 +20,12 @@ public class Category {
 
     private String name;
 
+    /**
+     * 실무에서는 안쓴다.
+     * @ManyToMany로 생성된 category_item 테이블에 새로운 컬럼을 따로 추가할 수 없다.
+     * 성능상 문제도 있다.
+     * 운영하기 어렵다고 한다.
+     */
     @ManyToMany
     @JoinTable(name = "category_item",
             joinColumns = @JoinColumn(name = "category_id"),

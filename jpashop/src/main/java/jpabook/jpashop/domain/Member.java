@@ -24,6 +24,10 @@ public class Member {
     @Embedded
     private Address address;
 
+    /**
+     * member에 의해 매핑된 거울일 뿐이며,
+     * 여기에 값을 넣는다고 Order 테이블의 외래키 값이 변경되지 않는다.
+     */
     @OneToMany(mappedBy = "member") // Order 엔티티의 member 필드에 의해 매핑되었다는 것을 명시
     private List<Order> orders = new ArrayList<>();
 }
