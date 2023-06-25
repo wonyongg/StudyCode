@@ -15,7 +15,7 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
-    @OneToOne(mappedBy = "delivery")
+    @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY)
     private Order order;
 
     @Embedded //@Embeddable, @Embedded 하나만 있어도 무방하나 명시하는 편이 가독성과 코드 파악에 도움이 됨.
