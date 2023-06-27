@@ -1,20 +1,21 @@
 
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/study/h2db/jpashop;
+    url: jdbc:h2:mem:test # 테스트 시에만 인메모리 DB를 이용
     username: sa
     password:
     driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create # 애플리케이션을 실행할 때 가존 테이블을 지우고 엔티티를 읽어 새로운 테이블을 자동으로 생성한다.
+      ddl-auto: create-drop # 애플리케이션을 실행할 때 가존 테이블을 지우고 엔티티를 읽어 새로운 테이블을 자동으로 생성하고 애플리케이션 종료시 다 drop 함 
 
     properties:
       hibernate:
         show_sql: true # jpa나 hibernate가 만들어 내는 sql문을 System.out으로 출력한다. 실제 개발을 진행할 때는 system.out으로 로그를 찍지 않으므로 false로 설정해둔다.
         format_sql: true
 
+# 사실 위 내용이 없어도 스프링이 알아서 테스트 케이스는 인메모리로 돌려주고 creat-drop으로 함
 
 logging:
   level:

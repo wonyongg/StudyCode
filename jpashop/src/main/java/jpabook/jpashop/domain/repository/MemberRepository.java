@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor // em의 EntityManager 주입을 하려면 @PersistenceContext이 필요한데 스프링이 @Autowired도 되게 해주기 때문에 이 애너테이션 사용이 가능하다.
 public class MemberRepository {
 //    @PersistenceContext // EntityManager를 주입한다.
-    private EntityManager em;
+    private final EntityManager em;
 
     public void save(Member member) {
         em.persist(member);
