@@ -9,13 +9,14 @@ import reportWebVitals from './reportWebVitals';
 // import CommentList from './chapter_05/CommentList';
 // import NotificationList from './chapter_06/NotificationList';
 // import Accommodate from './chapter_07/Accommodate';
-import ConfirmButtonFunction from './chapter_08/ConfirmBUtton-function';
+// import ConfirmButtonFunction from './chapter_08/ConfirmBUtton-function';
+import LandingPage from './chapter_09/LandingPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root')); 
 // 리액트 18버전부터 렌더링 코딩 방식이 바뀜
 root.render(
   <React.StrictMode>
-    <ConfirmButtonFunction />
+    <LandingPage />
   </React.StrictMode>
 );
 

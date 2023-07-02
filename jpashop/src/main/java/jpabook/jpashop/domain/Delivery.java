@@ -26,6 +26,6 @@ public class Delivery {
      * A 1, B 2였는데 중간에 C가 들어가면 A 1, C 2, B 3이되면서 기존에 B 2로 저장된 값들이 반영이 안되고 그대로라 꼬인다.
      */
     @Enumerated(EnumType.STRING)
-    private DeliveryStatus deliveryStatus; //READY, COMP
+    private DeliveryStatus Status; //READY, COMP
 
 }
