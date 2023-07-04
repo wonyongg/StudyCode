@@ -20,10 +20,12 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// 캐시 등 리로딩 등을 자동으로 해줘 서버를 재시작하지 않아도 Html 페이지의 변동 사항이 즉각 반영됨 (안녕하세요. -> 안녕)
 	implementation 'org.springframework.boot:spring-boot-devtools'
-    testImplementation 'junit:junit:4.13.1'// 캐시 등 리로딩 등을 자동으로 해줘 서버를 재시작하지 않아도 Html 페이지의 변동 사항이 즉각 반영됨 (안녕하세요. -> 안녕)
+    testImplementation 'junit:junit:4.13.1'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
