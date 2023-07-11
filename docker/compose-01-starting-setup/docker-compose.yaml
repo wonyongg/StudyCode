@@ -18,7 +18,7 @@
 version: "3.8" 
 # 도커 컴포즈 사양의 버전, Docker Docs에 최신 버전과 버전별 기능을 확일할 수 있다. 
 
-services: #해 당 도커 컴포즈의 서비스(컨테이너)를 명시한다.
+services: #해당 도커 컴포즈의 서비스(컨테이너)를 명시한다.
   mongodb: # 컨테이너명의 일부로 들어감 (compose-01-starting-setup-mongodb-1)
     # container_name: 컨테이너명 따로 지정 가능
     image: 'mongo' # Docker hub에서 공식 이미지 사용
