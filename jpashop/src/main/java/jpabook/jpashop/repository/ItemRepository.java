@@ -22,7 +22,7 @@ public class ItemRepository {
         if (item.getId() == null) {
             em.persist(item);
         } else {
-            em.merge(item);
+            em.merge(item); // 병합 방식에서 변경 감지 방식으로 변경 이후 사용 x
         }
     }
 

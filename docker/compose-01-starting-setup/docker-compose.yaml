@@ -1,0 +1,62 @@
+# yaml, yml 파일은 들여쓰기를 사용하여 구성 옵션 간의 종속성을 표현하는 특정한 텍스트 포멧이다.
+
+# 도커 컴포즈 특징
+# 컨테이너 구성을 파일 하나로 쉽게 만들 수 있으므로 단일 컨테이터일 때에도 자주 사용된다.
+# 다중 컨테이너의 유지보수 및 관리가 수월해진다.
+# Dockerfile을 대체하지는 않는다.
+# 개별 컨테이너의 -d, --rm은 디폴트임
+# 컴포즈 파일에 특정된 모든 서비스에 대해 새 환경을 자동으로 생성하고 모든 서비스를 네트워크에 추가한다.
+# 도커를 다시 실행할 때 이미지에 대한 변경이 있는 경우에만 재빌드를 한다.
+
+# 도커 컴포즈 실행
+# docker-compose up : 컴포즈 실행
+# docker-compose up -d : detached 모드로 실행
+# docker-compose down : 모든 서비스를 중지하고 컨테이너를 제거
+# docker-compose down -v : 볼륨까지 제거
+# docker-compose build : 컨테이너 실행하지 않고 이미지만 재빌드하게 된다.
+
+version: "3.8" 
+# 도커 컴포즈 사양의 버전, Docker Docs에 최신 버전과 버전별 기능을 확일할 수 있다. 
+
+services: #해당 도커 컴포즈의 서비스(컨테이너)를 명시한다.
+  mongodb: # 컨테이너명의 일부로 들어감 (compose-01-starting-setup-mongodb-1)
+    # container_name: 컨테이너명 따로 지정 가능
+    image: 'mongo' # Docker hub에서 공식 이미지 사용
+    volumes: # 볼륨 추가
+      - data:/data/db
+    # environment:
+    #   - MONGO_INITDB_ROOT_USERNAME=max
+    #   - MONGO_INITDB_ROOT_PASSWORD=secret
+    env_file:
+      - ./env/mongo.env
+  backend: #컨테이너명의 일부로 들어감 (compose-01-starting-setup-backend-1)
+    build: ./backend # ./backend 경로의 Dockerfile을 찾아 이미지를 빌드한다.
+    # build: 위보다 좀더 긴 형태로 Dockerfile의 이름이 다른 이름인 경우에 사용
+    #   context: ./backend
+    #   dockerfile: NewDockerfile 
+    ports: # 포트 설정
+      - '80:80'
+    volumes:
+      - logs:/app/logs
+      - ./backend:/app
+      - /app/node_modules
+    env_file:
+      - ./env/backend.env
+    depends_on: # backend 서버는 실행 중인 mongodb에 의존하기 때문에 의존성을 표현한다.
+      - mongodb
+
+  frontend: # 컨테이너명의 일부로 들어감 (compose-01-starting-setup-frontend-1)
+    build: ./frontend 
+    ports:
+    - '3000:3000'
+    volumes:
+      - ./frontend/src:/app/src
+    stdin_open: true # 개방형 표준 입력 연결이 필요하다는 것을 도커에 알린다.
+    tty: true # 터미널에 연결
+    depends_on:
+      - backend
+
+# 명명된 볼륨이므로 파일 끝의 최상위 volumes 키에도 추가해야 한다.
+volumes:
+  data:
+  logs:
