@@ -1,0 +1,16 @@
+apiVersion: apps/v1 # 현재 최신 apiVersion은 kubernetes 웹 페이지나 구글링을 통해 찾아보자.
+kind: Deployment # 생성하려는 항목
+metadata: # 생성하는 객체의 이름과 같은 중요 데이터가 들어간다.
+  name: seconde-app-deployment
+spec: # yaml 파일의 핵심이며, deployment를 구성하는 방법을 정의 
+  replicas: 1 # 디폴트 값으로 가지고자 하는 pod 인스턴스의 수 (기본은 1개) 
+  temlpalte: # 생성하고자 하는 pod를 정의한다. 따라서 kind는 적을 필요없다. pod를 정의하는 것이기 때문.
+    metadata: # 위의 metadata는 deployment 객체에 대한 것이고, 이 metadata는 pod 객체에 대한 것이다.
+      labels: # 키: value의 형태로 key든 value든 원하는대로 지정 가능
+        app: second-app
+    spec: # pod를 구성하는 방법을 정의
+      containers:
+        - name: second-node
+          image: wonyong/kub-first-app:2
+        # - name: ...
+          # image: ... 
