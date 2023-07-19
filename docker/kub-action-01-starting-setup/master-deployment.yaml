@@ -1,10 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: backend
+spec:
+  selector: # service 객체에 제어되거나, 연결되어야 하는 다른 리소스
+  # service 객체는 matchLabel 없이 키-값 쌍으로 직접 레이블을 지정한다.
+    app: second-app
+  ports:
+    - protocol: 'TCP' # 디폴트값
+      port: 80 # 노출시키려는 외부 포트
+      targetPort: 8080 # 컨테이너 내부에서 수신중인 포트
+    # - protocol: 'TCP'
+    #   port: 443
+    #   targetPort: 443
+  type: LoadBalancer # 가장 일반적으로 사용되며 외부와 엑세스
+  # ClusterIP : 디폴트 값이며, 내부적으로 노출된 IP
+  # NordPort : 기본적으로 실행되는 워커 노드의 IP와 포트에 노출
+# 명령어 minikube service backend
+
+--- # 3개의 대시여야 한다. 완전히 새로운 객체가 시작됨을 의미하는 yaml의 구문이기 때문이다.
+# service와 deployment를 동일한 파일 중 하나에 결합하는 경우 service를 먼저 배치하는 것이 좋다.
+#리소스는 위에서 아래로 생성되기 때문에 service 리소스가 먼저 생성되면 selector가 모든 부분을 동적으로 추가된다.
+
 apiVersion: apps/v1 # 현재 최신 apiVersion은 kubernetes 웹 페이지나 구글링을 통해 찾아보자.
 kind: Deployment # 생성하려는 항목
 metadata: # 생성하는 객체의 이름과 같은 중요 데이터가 들어간다.
   name: second-app-deployment
-  labels:
-    group: example # -l 플래그를 사용하여 레이블 별로 명령을 내릴 수 있다. 
-  # ex) kubectl delete deployments,services -l group=example -> 이 레이블을 가진 deployments와 services를 삭제하는 명령어.
 spec: # yaml 파일의 핵심이며, deployment를 구성하는 방법을 정의 
   replicas: 1 # 디폴트 값으로 가지고자 하는 pod 인스턴스의 수 (기본은 1개) 
   selector:
