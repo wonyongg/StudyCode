@@ -21,5 +21,13 @@ spec: # yaml 파일의 핵심이며, deployment를 구성하는 방법을 정의
       containers:
         - name: second-node
           image: wonyongg/kub-first-app:2
+          imagePullPolicy: Always # deployment 객체의 변화를 감지하여 태그가 같더라도 변화가 있다면 이미지를 당겨온다.
+          livenessProbe: # 활성 프로브로 컨테이너가 실행중인지 지속적으로 확인하는 데 사용된다.
+            httpGet:  # HTTP GET 요청을 사용하여 컨테이너의 상태를 확인한다.
+              path: / # HTTP 요청 경로는 "/"로 설정된다.
+              port: 8080 # HTTP GET 요청을 보낼 포트는 8080으로 설정된다.
+            periodSeconds: 10 # 컨테이너 상태를 확인하기 위해 프로브가 10초마다 실행된다.
+            initialDelaySeconds: 5 # 첫 번쨰 프로브가 실행되기 전 초기 지연으로 5초가 설정된다.
+
         # - name: ...
           # image: ... 
