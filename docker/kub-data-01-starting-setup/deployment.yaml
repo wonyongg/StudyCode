@@ -14,7 +14,14 @@ spec:
     spec:
       containers:
         - name: story
-          image: wonyongg/kub-data-demo:1
+          image: wonyongg/kub-data-demo:2
+          env:
+            - name: STORY_FOLDER
+              # value: 'story'
+              valueFrom:
+                configMapKeyRef: # 해달 맵에서 이 컨테이너의 환경 변수에 대한 값으로 설정하려는 데이터 키를 지정할 수 있다.
+                  name: data-store-env
+                  key: folder
           volumeMounts: # 컨테이너 내부에 마운트될 볼륨 정의
             - mountPath: /app/story # 마운트될 컨테이너 내부 경로
               name: story-volume
