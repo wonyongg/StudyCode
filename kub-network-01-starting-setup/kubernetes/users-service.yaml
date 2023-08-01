@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-service
+spec:
+  selector:
+    app: users
+  type: LoadBalancer # 외부에 ip 주소를 제공하여 통신할 수 있는 유일한 유형이지만, pod에 요청을 분산하는 유일한 유형은 아니다. ClusterIP 역시 로드 밸런싱이 가능하다.
+  ports:
+    - protocol: TCP
+      port: 8080 # 요청을 보낼 수 있는 service ip 주소의 포트
+      targetPort: 8080 # 요청이 전달될 컨테이너 내부, pod 내부의 포트
+
+
