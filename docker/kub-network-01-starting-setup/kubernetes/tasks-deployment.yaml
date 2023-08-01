@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasks-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tasks
+  template:
+    metadata:
+      labels:
+        app: tasks
+    spec:
+      containers:
+        - name: tasks
+          image: wonyongg/kub-demo-tasks:latest
+          env:
+            - name: AUTH_ADDRESS
+              value: "auth-service.default" # service.yaml에 적은 서비스명.네임스페이스을 통해 자동으로 생성된 도메인 이름을 값으로 받는다. 쿠버네티스의 내장 CoreDNS 기능에 의해 자동으로 생성된 도메인을 이용함
+            - name: TASKS_FOLDER
+              value: tasks # 폴더명
