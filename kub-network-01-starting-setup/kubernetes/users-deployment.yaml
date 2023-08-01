@@ -17,8 +17,6 @@ spec:
           image: wonyongg/kub-demo-users:latest
           env:
             - name: AUTH_ADDRESS
-              value: localhost # 동일한 pod에서 실행되는 2개의 컨테이너가 서로 통신하는 경우에 localhost라는 특수한 주소를 사용하면 통신할 수 있다.
-        - name: auth
-          image: wonyongg/kub-demo-auth:latest
-          
-
+              # value: localhost # 동일한 pod에서 실행되는 2개의 컨테이너가 서로 통신하는 경우에 localhost라는 특수한 주소를 사용하면 통신할 수 있다.
+              # value: "10.99.231.43" # kubectl get services를 통해 찾은 CLUSTER-IP
+              value: "auth-service.default" # service.yaml에 적은 서비스명.네임스페이스을 통해 자동으로 생성된 도메인 이름을 값으로 받는다. 쿠버네티스의 내장 CoreDNS 기능에 의해 자동으로 생성된 도메인으 이용함
