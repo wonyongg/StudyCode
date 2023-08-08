@@ -1,5 +1,5 @@
 import React from "react";
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 const Wrapper = styled.div`
     width: calc(100% - 32px);
@@ -13,21 +13,21 @@ const Wrapper = styled.div`
     cursor: pointer;
     background: white;
     :hover {
-        background: lightgray;
+        background: lightgrey;
     }
 `;
 
 const TitleText = styled.p`
     font-size: 20px;
     font-weight: 500;
-`
+`;
 
 function PostListItem(props) {
     const { post, onClick } = props;
 
     return (
         <Wrapper onClick={onClick}>
-             <TitleText>{post.title}</TitleText>
+            <TitleText>{post.title}</TitleText>
         </Wrapper>
     );
 }
