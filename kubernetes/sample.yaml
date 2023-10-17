@@ -1,0 +1,32 @@
+apiVersion: 
+# kubernetes에 오브젝트를 생성할 때 사용하는 apiVersion을 말한다. 
+# 이 오브젝트를 생성하기 위해 사용하고 있는 쿠버네티스 API 버전이 어떤 것인지를 명시한다.
+
+kind: 
+# 어떤 종류의 오브젝트를 생성하고자 하는지
+
+# Kind / Version 
+# Pod / v1
+# Service / v1
+# Replicaset / apps/v1
+# Deployment / apps/v1
+
+
+metadata:
+  name : myapp-pod
+  labels:
+    app: myapp
+    type: front-end
+# 오브젝트를 유일하게 구분지어 줄 데이터
+# name, labels 등 들여쓰기하여 하위 집합으로 표현한다.
+# name은 String이고, labels는 dictionary인 key:value로 이어진 쌍이다.
+# type으로 pod를 필터링할 수 있다.
+
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+# 쿠버네티스에 생성할 오브젝트에 대한 정보를 제공한다.
+# spec은 dictionary이다.
+# container는 List/Array이다.
+# 여러 개의 컨테이너가 하나의 pod 안에 있을 수 있기 때문이다.
