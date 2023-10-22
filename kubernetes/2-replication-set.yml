@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+    name: myapp-replicaset
+    labels:
+        app: myapp
+        type: front-end
+
+spec: 
+  template:
+    metadata: 
+      name: myapp-pod
+      labels:
+        app: myapp
+        type: front-end
+    spec: 
+      containers:
+      - name: nginx-container
+        image: nginx
+
+  replicas: 3 
+  selector: # ReplicaSet의 경우 selector 필드가 필수로 요구된다.
+    matchLabels:
+        type: front-end # 파드의 라벨과 매치
+
+  
+  # if replicaSet의 개수를 변경하고 싶은 경우
+  # 선언형 접근법 yml 파일 수정 후, kubectl replace -f 2-replication-set.yml
+  # 명령형 접근법 kubectl scale --replicas=6 -f 2-replication-set.yml
+
+  # 관련 pod를 전부 삭제하고 싶은 경우
+  # kubectl delete replicaset myapp-replicaset
