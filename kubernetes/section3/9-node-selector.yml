@@ -1,0 +1,12 @@
+apiVersion:
+kind: Pod
+metadata:
+  name: myapp-pod
+spec:
+  containers:
+    - name: data-processor
+      image: data- processor
+  nodeSelector:
+    size: Large
+
+# kubectl label nodes <node-name> <label-key>=<label-value>

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: myapp-pod
+spec:
+ containers:
+ - name: nginx-container
+   image: nginx   
+   
+tolerations:
+ - key: app
+   operator: Equal
+   value: blue
+   effect: NoSchedule
+
+# kubectl taint nodes node1 app=blue:NoSchedule
+# kubectl describe node kubemaster | grep Taint 미니쿠브로 돌리기 떄문에 'Taints:             <none>'로 나옴

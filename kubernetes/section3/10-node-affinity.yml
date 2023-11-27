@@ -1,0 +1,28 @@
+apiVersion:
+kind:
+metadata:
+  name: myapp-pod
+spec:
+  containers:
+    - name: data-processor
+      image: data-processor
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: size
+              operator: In
+              values:
+                - Large
+                - Medium
+
+            # 위와 똑같다    
+            - key: size
+              operator: NotIn
+              values:
+                - small
+
+            # Exists는 단순히 size라는 Label이 있는지 확인한다. 
+            - key: size
+              operator: Exists
