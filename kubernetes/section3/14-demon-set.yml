@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: DaemonSet # ReplicaSet 대신 DaemonSet
+metadata:
+  name: monitoring-daemon
+spec:
+  selector:
+    matchLabels:
+      app: monitoring-agent
+  template:
+    metadata:
+      labels:
+        app: monitoring-agent
+      spec:
+        containers:
+          - name: monitoring-agent
+            image: monitoring-agent
+
+# 레플리카셋과 비슷한데 모든 노드에 하나의 공통 파드를 복제한다.
+# Monitoring Solution, Logs viewer, Network 등 각 노드에 필요한 공통 기능 파드로 사용함
