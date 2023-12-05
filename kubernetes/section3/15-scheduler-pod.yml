@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+    - image: nginx
+      name: nginx
+  schedulerName: mu-custom-scheduler
+
+
+# 커스텀 스케줄러 적용 확인 방법
+# kubectl get events -o wide
+
+# 스케줄러 로그 확인하기
+# kubectl logs my-custom-scheduler --name-space=kube-system
