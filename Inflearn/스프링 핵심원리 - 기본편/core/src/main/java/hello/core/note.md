@@ -13,6 +13,7 @@ public class OrderServiceImpl implements OrderService {
 }
 
 ```
+<br><br>
 
 ### final의 사용
 ```java
@@ -29,6 +30,8 @@ public class MemberServiceImpl implements MemberService {
 
 * final을 붙이는 이유는 생성자를 통해 최초로 필드에 의존성 주입이 이뤄지면 그 이후부터는 변경 불가 상태를 만들기 위함이다.
 * 만약 2번처럼 사용하게 되면 생성자 주입으로 필드에 의존성을 할당해도 추후에 언제든지 필드 주입으로 변경가능하다.
+
+<br><br>
 
 ### spring bean 주입과 같은 역할
 ```java
@@ -52,6 +55,7 @@ public class OrderApp {
     }
 }
 ```
+<br><br>
 
 ### SOLID 원칙을 지키는 AppConfig
 ```java
@@ -93,11 +97,15 @@ public class AppConfig {
 * 이렇게 스프링 컨테이너에 등록된 객체를 스프링 빈이라고 함
   * 스프링 빈을 등록하는 방법은 직접 등록하는 방법과 AppConfig와 같이 팩토리 빈으로 등록하는 방법이 있다.
 
+<br><br>
+
 ### BeanFactory
 - 스프링 컨테이너의 최상위 인터페이스이다.
 - 스프링 빈을 관리하고 조회하는 역할을 담당한다.
 - `getBean()`을 제공한다.
 - 실무에서 사용하는 스프링의 기능 대부분은 BeanFactory가 제공하는 기능이다. 
+
+<br><br>
 
 ### ApplicationContext
 - BeanFactory 기능을 모두 상속받아 제공한다.
@@ -105,11 +113,15 @@ public class AppConfig {
   - 메시지 소스를 활용한 국제화 기능, 환경변수, 애플리케이션 이벤트, 리소스 조회
 - BeanFactory을 직접 사용하지 않고 보통은 ApplicationContext를 사용한다.
 
+<br><br>
+
 ### 스프링 빈 메타 정보 - BeanDefinition
 - 스프링이 자바 코드나, XML 등 다양한 설정 형식을 지원할 수 있는 이유는 BeanDefinition 때문이다.
 - 스프링 컨테이너 입장에서는 자바 코드인지, XML인지 몰라도 된다. BeanDefinition만 알면 장땡이다.
   - 다양한 설정 형식을 읽어 BeanDefinition으로 만들면 된다!
 - BeanDefinition을 직접 생성하여 스프링 컨테이너에 등록할 수 있다. 스프링 코드나 관련 오플 소스에 BeanDefinition에 대한 정보가 나오면 이 메커니즘을 떠올리자.
+
+
 
 #### BeanDefinition 정보
 - beanClassName : 생성할 빈의 클래스 명(자바 설정처럼 팩토리 역할의 빈을 사용하면 없음)
@@ -145,6 +157,8 @@ public class AppConfig {
 - 만약 트랙픽이 초당 100번 발생하면 말그대로 초당 100 개의 객체가 생성되고 소멸된다.
   - 이는 메모리 낭비가 매우 심하다.
 - 객체를 한 개만 생성하고 이를 공유하도록 설계하여 문제를 해결할 수 있다. -> 싱글톤 패턴
+
+<br><br>
 
 #### 싱글톤 패턴
 ```java
@@ -203,7 +217,7 @@ public class SingletonService {
         System.out.println("price = " + price);
   
         Assertions.assertThat(statefulService1.getPrice()).isEqualTo(20000); // true
-}
+    }
     ```
 ---
 
@@ -268,6 +282,7 @@ public class AppConfig {
 - 놀랍게도 모두 같은 인스턴스를 공유하여 사용하고 있다.
 - 스프링 빈이 싱글톤이 되도록 보장해주고 있는 것이다.
 
+<br><br>
 ```java
       void configurationDeep() {
         AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -296,3 +311,52 @@ public class AppConfig {
   ```
   - 아마도 이런 식으로 스프링 빈이 존재하는지를 체크하여 없으면 생성하고 있다면 찾아서 반환해주는 방식으로 싱글톤을 보장할 것이다.
   - 이 CGLIB 기술을 사용하는 것이 바로 @Configuration이며, 만약 해당 애너테이션을 제거하면 @Bean으로 인해 스프링 빈으로는 등록되지만 싱글톤은 보장하지 않게 된다.
+
+---
+
+## @ComponentScan & @Autowired
+### @ComponentScan
+- 스프링 빈을 @Bean 애너테이션이나 XML 등을 통해 직접 등록할 수 있지만, 등록해야 할 빈이 수십객가 넘어가면 누락될 문제가 발생할 수도 있고, 일일이 등록하기도 힘들다.
+- 스프링에서는 설정 정보를 따로 주지 않아도 자동으로 스프링 빈을 등록하는 컴포넌트 스캔이라는 기능을 제공한다.
+- @ComponentScan은 @Component가 붙은 모든 클래스를 스프링 빈으로 등록한다.
+- 이떄 자동으로 등록되는 스프링 빈의 기본 이름은 클래스 명에 맨 앞글자를 소문자로 하여 만들어진다.
+
+### 컴포넌트 스캔의 탐색 위치와 기본 탐색 대상
+
+```java
+import org.springframework.context.annotation.ComponentScan;
+
+@ComponentScan(
+        basePackages = "hello.core"
+)
+```
+- `basePackages`
+  - 탐색할 패키지의 시작 위치를 지정할 수 있다.
+- {} 안에 여러 패키지를 한 번에 지정할 수 있다.
+- `basePackageClasses` : 지정한 클래스의 패키지를 탐색 시작 위치로 지정한다.
+- ```java
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    @Inherited
+    @SpringBootConfiguration
+    @EnableAutoConfiguration
+    @ComponentScan(excludeFilters = { @Filter(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),
+    @Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) })
+    public @interface SpringBootApplication { ... }
+  ```
+  - 스프링 부트는 기본적으로 프로젝트 최상단에 위치한 클래스(XXXApplication)에 @SpringBootApplication 애너테이션을 통해 컴포넌트 스캔을 적용한다.
+    - @SpringBootApplication 안에 @ComponentScan이 있다.
+    - 프로젝트 최상단 위치에서부터 탐색을 시작하게 된다.
+  - includeFilters는 컴포넌트 스캔 대상을 추가로 지정한다.
+  - excludeFilters는 컴포넌트 스캔에서 제외할 대상을 지정한다.
+
+<br><br>
+
+### @Autowired
+- 생성자에 @Autowired를 지정하면, 스프링 컨테이너가 자동으로 해당 스프링 빈을 찾아 주입한다.
+
+### 자동 빈 등록 vs 수동 빈 등록
+- 스프링 부트에서는 자동, 수동 빈 등록이 충돌나면 에러가 발생하게 된다.
+- application 설정에
+  spring.main.`allow-bean-definition-overriding=true`를 추가하게 되면 수동으로 등록한 빈이 우선되어 등록된다.
