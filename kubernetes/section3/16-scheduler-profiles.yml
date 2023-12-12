@@ -1,0 +1,13 @@
+apiVersion: v
+kind: Pod
+metadata:
+  name: simple-webapp-color
+spec:
+  priorityClassName: high-priority # 여기
+  containers:
+    - name: simple-webapp-color
+      image: simple-webapp-color
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: 10
