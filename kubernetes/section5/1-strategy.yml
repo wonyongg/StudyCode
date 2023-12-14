@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    tier: backend 
+  name: my-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      tier: backend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailiable: 1
+      maxSurge: 2
+  template:
+    metadata:
+      labels:
+        tier: backend
+    spec:
+      containers:
+        - image: my-springboot:0.1
+          name: my-springboot
+          ports:
+         	  - containerPort: 8080
