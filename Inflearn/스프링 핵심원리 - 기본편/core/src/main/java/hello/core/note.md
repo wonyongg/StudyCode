@@ -360,3 +360,66 @@ import org.springframework.context.annotation.ComponentScan;
 - 스프링 부트에서는 자동, 수동 빈 등록이 충돌나면 에러가 발생하게 된다.
 - application 설정에
   spring.main.`allow-bean-definition-overriding=true`를 추가하게 되면 수동으로 등록한 빈이 우선되어 등록된다.
+
+---
+
+## 조회 빈이 2 개 이상일 때 해결 방법
+### @Autowired
+
+```java
+@Component
+public class OrderServiceImpl implements OrderService {
+
+  private final MemberRepository memberRepository;
+  @Autowired
+  private final DiscountPolicy rateDiscountPolicy;
+
+  @Autowired
+  public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy rateDiscountPolicy) {
+    this.memberRepository = memberRepository;
+    this.discountPolicy = rateDiscountPolicy;
+  }
+```
+- 타입 매칭의 겨로가가 2개 이상일 경우 필드명이나 파라미터 명으로 빈 이름을 매칭한다.
+
+### @Qualifier
+
+```java
+@Component
+@Qualifier("rateDiscountPolicy")
+public class RateDiscountPolicy implements DiscountPolicy {}
+```
+```java
+  @Autowired 
+  public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+    this.memberRepository = memberRepository;
+    this.discountPolicy = discountPolicy;
+  }
+```
+- @Qualifier끼리 매칭한다.
+- 만약, 찾지 못하면 빈 이름으로 매칭한다.
+- 그래도 못찾으면 NoSuchBeanDefinitionException 예외가 발생한다.
+
+### @Primary
+- 우선순위를 정할 수 있어 @Primary 애너테이션이 붙은 빈이 우선권을 가진다. 
+
+### @Primary, @Qualifier 활용
+- 메인을 사용하는 스프링 빈에 @primary를 적용하고 특별히 혹은 가끔 사용하는 서브 스프링 빈에 @Qualifier를 사용하면 된다.
+- 둘 중의 우선순위는 좀 더 구체적으로 적용하는 @Qualifier가 더 높다.
+
+---
+
+## 애너테이션 만들기
+```java
+ package hello.core.annotataion;
+ import org.springframework.beans.factory.annotation.Qualifier;
+ import java.lang.annotation.*;
+ @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER,
+ ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+ @Retention(RetentionPolicy.RUNTIME)
+ @Documented
+ @Qualifier("MainDiscountPolicy")
+ public @interface MainDiscountPolicy {
+}
+```
+- @Qualifier("mainDiscountPolicy)라고 적는건 타입 체크가 불가능하기 때문에 애너테이션을 만들어서 문제를 해결할 수 있다.
