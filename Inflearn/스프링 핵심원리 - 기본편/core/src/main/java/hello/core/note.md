@@ -362,6 +362,51 @@ import org.springframework.context.annotation.ComponentScan;
   spring.main.`allow-bean-definition-overriding=true`를 추가하게 되면 수동으로 등록한 빈이 우선되어 등록된다.
 
 ---
+## 다양한 의존관계 주입 방법
+```java
+@Component
+public class OrderServiceImpl implements OrderService {
+    private final MemberRepository memberRepository; // final로 불변 보장
+    private final DiscountPolicy discountPolicy;
+    
+    @Autowired // 생성자로 필수 보장
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy
+            discountPolicy) {
+      this.memberRepository = memberRepository;
+      this.discountPolicy = discountPolicy;
+    }
+}
+```
+
+```java
+import lombok.RequiredArgsConstructor;
+
+@Component
+@RequiredArgsConstructor // 이거 하나로 위와 동일
+public class OrderServiceImpl implements OrderService {
+  private final MemberRepository memberRepository; // final로 불변 보장
+  private final DiscountPolicy discountPolicy;
+}
+```
+- 생성자 주입
+  - 생성자를 통해 의존 관계를 주입받는다.
+  - 생성자 호출 시점에 딱 1번만 호출되는 것이 보장된다.
+  - 불변하며 필수적인 의존관계에 사용된다.
+    - 대부분 불변하며 필수적이어야 하기 때문에 그냥 생성자 주입을 쓰면 된다.
+<br><br>
+- 수정자 주입(setter 주입)
+  - 선택, 변경 가능성이 있는 의존관계에 사용
+  - 가끔 필요한 경우 사용할 수 있다.
+- 필드 주입
+  - 외부에서 변경이 불가능하다.
+  - DI 프레임워크가 없으면 아무것도 할 수 없다.
+  - 사용하지 않는 것이 좋다.
+- 일반 메서드 주입
+  - 한번에 여러 필드를 주입받을 수 있다.
+  - 생성자 주입을 사용하고 일반 메서드 주입은 잘 사용하지 않는다.
+
+
+
 
 ## 조회 빈이 2 개 이상일 때 해결 방법
 ### @Autowired
@@ -423,3 +468,45 @@ public class RateDiscountPolicy implements DiscountPolicy {}
 }
 ```
 - @Qualifier("mainDiscountPolicy)라고 적는건 타입 체크가 불가능하기 때문에 애너테이션을 만들어서 문제를 해결할 수 있다.
+
+---
+
+## 조회한 빈이 모두 필요할 때(List, Map)
+```java
+public class AllBeanTest {
+    @Test
+    void findAllBean() {
+        ApplicationContext ac = new AnnotationConfigApplicationContext(AutoAppConfig.class, DiscountService.class);
+        DiscountService discountService = ac.getBean(DiscountService.class);
+        Member member = new Member(1L, "userA", Grade.VIP);
+        
+        int discountPrice = discountService.discount(member, 10000, "fixDiscountPolicy");
+        
+        assertThat(discountService).isInstanceOf(DiscountService.class);
+        assertThat(discountPrice).isEqualTo(1000);
+    }
+    
+    static class DiscountService {
+        
+        private final Map<String, DiscountPolicy> policyMap;
+        private final List<DiscountPolicy> policies;
+        
+        public DiscountService(Map<String, DiscountPolicy> policyMap, List<DiscountPolicy> policies) {
+            this.policyMap = policyMap;
+            this.policies = policies;
+        }
+        
+        public int discount(Member member, int price, String discountCode) {
+            DiscountPolicy discountPolicy = policyMap.get(discountCode);
+            
+            return discountPolicy.discount(member, price);
+        } 
+    }
+}
+```
+- 의도적으로 특정 타입의 스프링 빈이 다 필요한 경우가 있을 수 있다.
+- 예를 들어 할인 서비스를 제공하는데 할인의 종류를 클라이언트가 고른다거나 하는 경우이다.(고정할인, 비율할인)
+- 로직 설명
+  - DiscountService에서 해당 빈을 Map or List로 모두 가지고 있다.
+  - 고객이 요청을 보낼 때 특정 할인 정책을 구분하는 파라미터 값을 함께 보낸다.
+  - 해당하는 정책을 Map이나 List에서 꺼내어 적용한 할인 값을 리턴한다.(discount 메서드)
