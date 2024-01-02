@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data: # spec이 아니라 data
+  APP_COLOR: blue
+  APP_MODE: prod
+
+# 이름을 짓는게 중요하다. 예를 들어 mysql이면 mysql-config로 짓고 data: 하단에 Mysql 관련된 구성 정보를 입력한다.
+# kubectl get configmaps
+# kubectl describe condifmaps
+
+---
+# pod와 연결시키기
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webapp-color
+spec:
+  containers:
+    - name: simple-webapp-color
+      image: simple-webapp-color
+      ports:
+        - containerPort: 8080
+# env
+      envFrom:
+        - configMapRef:
+          name: app-config
+# single env
+      env:
+        - name: APP_COLOR
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_COLOR
+# volume
+      volumes:
+        - name: app-config-volume
+          configMap:
+            name: app-config
