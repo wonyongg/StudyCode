@@ -13,26 +13,28 @@ kubectl: X-1 ~ X+1까지 가능
 
 #### 마스터 노드(Control Plane) 업그레이드
 ##### kubeadm upgrade
-apt-get upgrade -y kubeadm-1.12.0.-00
+apt-get update
+apt-get install kubeadm=1.12.0.-00
 kubeadm version
 kubeadm upgrade plan : 다운로드 받은 업그레이드 가능 버전, 안정화 버전 등 확인 가능 
 kubeadm upgrade apply v1.12.0
 kube get nodes : 컨트롤 플레인 버전은 그대로일 것 이것은 kubelet 버전을 보여주기 때문, 수동으로 업그레이드해줘야함
 
 ##### 마스터 노드(Control Plane) 업그레이드
-kubectl drain controlplane --igonre-daemonsets
-apt-get upgrade -y kubelet-1.12.0.-00
+kubectl drain controlplane --ignore-daemonsets
+apt-get install kubelet=1.12.0.-00
 systemctl daemon-reload
 systemctl restart kubelet
 kubectl get nodes(업데이트 됨을 확인 가능)
 
 #### 워커 노드 업그레이드
-apt-get upgrade -y kubeadm-1.12.0.-00
-kubeadm upgrade node
+apt-get update
+apt-get install kubeadm=1.27.0-00
+kubeadm upgrade node(node이름 아님 그냥 node)
 
 kubectl drain node-1 --igonre-daemonsets
-apt-get upgrade -y kubelet-1.12.0.-00
-kubeadm upgrade nod config --kubelet0version v1.12.0
+apt-get install kubelet=1.27.0-00 
+kubeadm upgrade node config --kubelet=version v1.27.0
 systemctl daemon-reload
 systemctl restart kubelet
 kubectl uncordon node-1
