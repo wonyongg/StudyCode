@@ -50,16 +50,35 @@ class _MainScreenState extends State<MainScreen> {
             width: 300,
             height: 100,
             // margin: EdgeInsets.all(30), // 컨테이너 외부 화면의 여백
-            margin: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10), // 컨테이너 외부 화면의 여백
-            alignment: Alignment.center, // 컨테이너 기준 정렬
+            margin: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
+            // 컨테이너 외부 화면의 여백
+            alignment: Alignment.center,
+            // 컨테이너 기준 정렬
             child: Text('컨테이너입니다.'),
             // color: Colors.blue,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.lightBlueAccent),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.lightBlueAccent,
+            ),
           ),
-          SizedBox( // 컨테이너의 기능에서 시이즈 값만 사용하는 경우
-            width: 100,
-            height: 300,
-            child: Text("사이드 박스입니다."),
+          SizedBox(
+            // 컨테이너의 기능에서 시이즈 값만 사용하는 경우
+            width: 400,
+            height: 50,
+            child: Text(
+              "사이드 박스입니다.",
+              style: TextStyle(
+                color: Colors.amber,
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+              ),
+            ),
+          ),
+          Row( // cmd + enter wrap with row
+            children: [
+              Image.asset('assets/car.png', width: 100, height: 100,), // https://www.flaticon.com/
+              Icon(Icons.home, size: 100,),
+            ],
           )
         ],
       ),
