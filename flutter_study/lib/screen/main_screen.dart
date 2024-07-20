@@ -74,12 +74,37 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
-          Row( // cmd + enter wrap with row
+          Row(
+            // cmd + enter wrap with row
             children: [
-              Image.asset('assets/car.png', width: 100, height: 100,), // https://www.flaticon.com/
-              Icon(Icons.home, size: 100,),
+              Image.asset(
+                'assets/car.png',
+                width: 100,
+                height: 100,
+              ),
+              // https://www.flaticon.com/
+              Icon(
+                Icons.home,
+                size: 100,
+              ),
             ],
-          )
+          ),
+          Container(
+            width: 120,
+            margin: EdgeInsets.all(10), // 전체 마진
+            child: ElevatedButton(
+                onPressed: () {
+                  // ctrl + space Bar
+                  // 클릭되었을 때 동작하고 싶은 액션 정의
+                  print('버튼이 클릭되었습니다.');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.pinkAccent,
+                  foregroundColor: Colors.cyan,
+                  elevation: 3,
+                ),
+                child: Text('눌러보세요!')),
+          ),
         ],
       ),
     );
