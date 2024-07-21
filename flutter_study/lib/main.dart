@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_study/screen/list_view_screen.dart';
 import 'package:flutter_study/screen/main_screen.dart';
 import 'package:flutter_study/screen/splash_screen.dart';
+import 'package:flutter_study/screen/text_field_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', // 최초 이동 화면
       routes: {
         '/': (context) => SplashScreen(),
-        '/main' : (context)  => MainScreen(),
+        '/main' : (context)  => TextFieldScreen(),
       },
     );
   }
