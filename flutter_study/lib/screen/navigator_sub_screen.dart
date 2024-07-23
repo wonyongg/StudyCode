@@ -2,25 +2,39 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // 서브 화면
-class NavigatorSubScreen extends StatefulWidget {
-  const NavigatorSubScreen({super.key});
+class NavigatorSubScreen extends StatelessWidget {
+  String msg;
 
-  @override
-  State<NavigatorSubScreen> createState() => _NavigatorSubScreenState();
-}
+  NavigatorSubScreen({super.key, required this.msg});
 
-class _NavigatorSubScreenState extends State<NavigatorSubScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false, // 기본 네비게이터 바 백스페이스 날림
         title: Text('서브 화면'),
+        actions: [
+          Icon(Icons.access_alarms_sharp),
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                '뒤로가기',
+                style: TextStyle(color: Colors.redAccent),
+              ))
+        ],
       ),
       body: Column(
         children: [
           Center(
-            child: Text('서브화면입니다.'),
+            child: Text('서브화면입니다. $msg'),
           ),
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('뒤로가기'))
         ],
       ),
     );
