@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
 
     // 임시용 INSERT 데이터
-    setInsertIdaInfo();
+    // setInsertIdaInfo();
 
     // 아이디어 정보 가져오기
     getIdeaInfo();
@@ -53,6 +53,7 @@ class _MainScreenState extends State<MainScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // 새 아이디어 작성 화면으로 이동
+          Navigator.pushNamed(context, '/edit');
         },
         child: Image.asset(
           'assets/idea.png',
