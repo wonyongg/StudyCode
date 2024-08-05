@@ -22,6 +22,7 @@ class IdeaInfo {
     return {
       'id': id,
       'title': title,
+      'motive': motive,
       'content': content,
       'priority': priority,
       'feedback': feedback,
