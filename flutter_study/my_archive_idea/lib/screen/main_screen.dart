@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
 
     // 임시용 INSERT 데이터
-    // setInsertIdaInfo();
+    setInsertIdaInfo();
 
     // 아이디어 정보 가져오기
     getIdeaInfo();
