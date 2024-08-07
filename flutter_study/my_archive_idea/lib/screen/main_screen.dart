@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
 
     // 임시용 INSERT 데이터
-    setInsertIdaInfo();
+    // setInsertIdeaInfo();
 
     // 아이디어 정보 가져오기
     getIdeaInfo();
@@ -141,7 +141,7 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {}); // list 갱신으로 UI 업데이트
   }
 
-  Future setInsertIdaInfo() async {
+  Future setInsertIdeaInfo() async {
     // 삽입하는 메서드
     await dbHelper.initDatabase();
     await dbHelper.insertIdeaInfo(

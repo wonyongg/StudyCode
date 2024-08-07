@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_archive_idea/database/database_helper.dart';
 
 import '../data/idea_info.dart';
 
@@ -32,8 +33,10 @@ class _EditScreenState extends State<EditScreen> {
   bool isClickPoint5 = false;
 
   // 아이디어 선택된 현재 중요도 점수 (default value = 3)
-
   int priorityPoint = 3;
+
+  // database helper
+  final dbHelper = DatabaseHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +160,8 @@ class _EditScreenState extends State<EditScreen> {
               Container(
                 margin: EdgeInsets.only(top: 8),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround, // Row 안에 간격 자동 조절
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  // Row 안에 간격 자동 조절
                   children: [
                     GestureDetector(
                       child: Container(
@@ -166,11 +170,13 @@ class _EditScreenState extends State<EditScreen> {
                         width: 50,
                         height: 40,
                         decoration: ShapeDecoration(
-                          color: isClickPoint1 ? Color(0xffd6d6d6) : Colors.white,
+                            color: isClickPoint1
+                                ? Color(0xffd6d6d6)
+                                : Colors.white,
                             shape: RoundedRectangleBorder(
-                          side: BorderSide(width: 1, color: Colors.black),
-                          borderRadius: BorderRadius.circular(10),
-                        )),
+                              side: BorderSide(width: 1, color: Colors.black),
+                              borderRadius: BorderRadius.circular(10),
+                            )),
                         child: Text(
                           '1',
                           style: TextStyle(
@@ -184,6 +190,10 @@ class _EditScreenState extends State<EditScreen> {
                         // 1. 모든 버튼 값 초기화
                         initClickStatus();
                         // 2. 선택된 버튼에 대한 변수 값 및 위젯 update
+                        setState(() {
+                          priorityPoint = 1;
+                          isClickPoint1 = true;
+                        });
                       },
                     ),
                     GestureDetector(
@@ -193,6 +203,9 @@ class _EditScreenState extends State<EditScreen> {
                         width: 50,
                         height: 40,
                         decoration: ShapeDecoration(
+                            color: isClickPoint2
+                                ? Color(0xffd6d6d6)
+                                : Colors.white,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(width: 1, color: Colors.black),
                               borderRadius: BorderRadius.circular(10),
@@ -207,7 +220,13 @@ class _EditScreenState extends State<EditScreen> {
                         ),
                       ),
                       onTap: () {
-
+                        // 1. 모든 버튼 값 초기화
+                        initClickStatus();
+                        // 2. 선택된 버튼에 대한 변수 값 및 위젯 update
+                        setState(() {
+                          priorityPoint = 2;
+                          isClickPoint2 = true;
+                        });
                       },
                     ),
                     GestureDetector(
@@ -217,6 +236,9 @@ class _EditScreenState extends State<EditScreen> {
                         width: 50,
                         height: 40,
                         decoration: ShapeDecoration(
+                            color: isClickPoint3
+                                ? Color(0xffd6d6d6)
+                                : Colors.white,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(width: 1, color: Colors.black),
                               borderRadius: BorderRadius.circular(10),
@@ -231,7 +253,13 @@ class _EditScreenState extends State<EditScreen> {
                         ),
                       ),
                       onTap: () {
-
+                        // 1. 모든 버튼 값 초기화
+                        initClickStatus();
+                        // 2. 선택된 버튼에 대한 변수 값 및 위젯 update
+                        setState(() {
+                          priorityPoint = 3;
+                          isClickPoint3 = true;
+                        });
                       },
                     ),
                     GestureDetector(
@@ -241,6 +269,9 @@ class _EditScreenState extends State<EditScreen> {
                         width: 50,
                         height: 40,
                         decoration: ShapeDecoration(
+                            color: isClickPoint4
+                                ? Color(0xffd6d6d6)
+                                : Colors.white,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(width: 1, color: Colors.black),
                               borderRadius: BorderRadius.circular(10),
@@ -255,7 +286,13 @@ class _EditScreenState extends State<EditScreen> {
                         ),
                       ),
                       onTap: () {
-
+                        // 1. 모든 버튼 값 초기화
+                        initClickStatus();
+                        // 2. 선택된 버튼에 대한 변수 값 및 위젯 update
+                        setState(() {
+                          priorityPoint = 4;
+                          isClickPoint4 = true;
+                        });
                       },
                     ),
                     GestureDetector(
@@ -265,6 +302,9 @@ class _EditScreenState extends State<EditScreen> {
                         width: 50,
                         height: 40,
                         decoration: ShapeDecoration(
+                            color: isClickPoint5
+                                ? Color(0xffd6d6d6)
+                                : Colors.white,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(width: 1, color: Colors.black),
                               borderRadius: BorderRadius.circular(10),
@@ -279,7 +319,13 @@ class _EditScreenState extends State<EditScreen> {
                         ),
                       ),
                       onTap: () {
-
+                        // 1. 모든 버튼 값 초기화
+                        initClickStatus();
+                        // 2. 선택된 버튼에 대한 변수 값 및 위젯 update
+                        setState(() {
+                          priorityPoint = 5;
+                          isClickPoint5 = true;
+                        });
                       },
                     ),
                   ],
@@ -318,6 +364,60 @@ class _EditScreenState extends State<EditScreen> {
               SizedBox(
                 height: 16,
               ),
+              // 아이디어 작성 완료 버튼
+              GestureDetector(
+                child: Container(
+                  height: 65,
+                  alignment: Alignment.center,
+                  child: Text('아이디어 작성 완료'),
+                  decoration: ShapeDecoration(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 1,
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                onTap: () async {
+                  // 아이디어 작성 처리
+                  String titleValue = _titleController.text.toString();
+                  String motiveValue = _motiveController.text.toString();
+                  String contentValue = _contentController.text.toString();
+                  String feedbackValue = _feedbackController.text.toString();
+
+                  // 유효성 검사(null 값 체크)
+                  if (titleValue.isEmpty ||
+                      motiveValue.isEmpty ||
+                      contentValue.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('비어있는 입력 값이 존재합니다.'),
+                      duration: Duration(seconds: 2),
+                    ));
+                    return;
+                  }
+
+                  if (widget.ideaInfo == null) {
+                    // 아이디어 정보 클래스 인스턴스 생성 후 db 삽입
+                    var ideaInfo = IdeaInfo(
+                      title: titleValue,
+                      motive: motiveValue,
+                      content: contentValue,
+                      priority: priorityPoint,
+                      feedback: feedbackValue.isNotEmpty ? feedbackValue : '',
+                      createdAt: DateTime.now().millisecondsSinceEpoch,
+                    );
+
+                    await setInsertIdeaInfo(ideaInfo);
+                    if (mounted) {
+                      // 모든 시나리오가 완료되었으니 이전 화면으로 이동
+                      Navigator.pop(context);
+                    }
+                  }
+                },
+              ),
             ],
           ),
         ),
@@ -325,5 +425,18 @@ class _EditScreenState extends State<EditScreen> {
     );
   }
 
-  void initClickStatus() {}
+  Future setInsertIdeaInfo(IdeaInfo ideaInfo) async {
+    // 삽입하는 메서드
+    await dbHelper.initDatabase();
+    await dbHelper.insertIdeaInfo(ideaInfo);
+  }
+
+  void initClickStatus() {
+    // 클릭 상태를 초기화해주는 함수
+    isClickPoint1 = false;
+    isClickPoint2 = false;
+    isClickPoint3 = false;
+    isClickPoint4 = false;
+    isClickPoint5 = false;
+  }
 }
