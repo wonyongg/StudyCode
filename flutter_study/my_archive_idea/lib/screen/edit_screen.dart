@@ -39,6 +39,45 @@ class _EditScreenState extends State<EditScreen> {
   final dbHelper = DatabaseHelper();
 
   @override
+  void initState() {
+    super.initState();
+
+    // 기존 데이터를 수정하는 경우 수정 편의를 위해 기존 데이터를 입력 위젯에 자동 기입
+    if (widget.ideaInfo != null) {
+      // 입력 필드 세팅
+      _titleController.text = widget.ideaInfo!.title;
+      _motiveController.text = widget.ideaInfo!.motive;
+      _contentController.text = widget.ideaInfo!.content;
+      // 피드백 입력 필드의 경우는 옵션이기 때문에 따로 값이 비었는지 체크 필요
+      if(widget.ideaInfo!.feedback.isNotEmpty) {
+        _feedbackController.text = widget.ideaInfo!.feedback;
+      }
+
+      // 아이디어 중요도 점수 세팅
+      initClickStatus();
+      switch (widget.ideaInfo!.priority)  {
+        case 1:
+          isClickPoint1 = true;
+          break;
+        case 2:
+          isClickPoint2 = true;
+          break;
+        case 3:
+          isClickPoint3 = true;
+          break;
+        case 4:
+          isClickPoint4 = true;
+          break;
+        case 5:
+          isClickPoint5 = true;
+          break;
+      }
+
+      priorityPoint = widget.ideaInfo!.priority;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     // leading : 화면 좌측에 배치
     return Scaffold(
@@ -55,7 +94,7 @@ class _EditScreenState extends State<EditScreen> {
           },
         ),
         title: Text(
-          '새 아이디어 작성하기',
+          widget.ideaInfo == null ? '새 아이디어 작성하기' : '아이디어 편집',
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
       ),
@@ -399,6 +438,7 @@ class _EditScreenState extends State<EditScreen> {
                     return;
                   }
 
+                  // 새 아이디어를 작성하는 경우
                   if (widget.ideaInfo == null) {
                     // 아이디어 정보 클래스 인스턴스 생성 후 db 삽입
                     var ideaInfo = IdeaInfo(
@@ -413,7 +453,24 @@ class _EditScreenState extends State<EditScreen> {
                     await setInsertIdeaInfo(ideaInfo);
                     if (mounted) {
                       // 모든 시나리오가 완료되었으니 이전 화면으로 이동
-                      Navigator.pop(context);
+                      Navigator.pop(context, 'insert');
+                    }
+                  }
+                  // 기존의 이아디어를 업데이트 하는 경우
+                  else {
+                    var ideaInfoModify = widget.ideaInfo;
+                    ideaInfoModify?.title = titleValue;
+                    ideaInfoModify?.motive = motiveValue;
+                    ideaInfoModify?.content = contentValue;
+                    ideaInfoModify?.priority = priorityPoint;
+                    ideaInfoModify?.feedback = feedbackValue.isNotEmpty ? feedbackValue : '';
+
+                    // 데이터 업데이트
+                    await setUpdateIdeaInfo(ideaInfoModify!);
+
+                    // 스크린 닫기
+                    if (mounted) {
+                      Navigator.pop(context, 'update');
                     }
                   }
                 },
@@ -429,6 +486,12 @@ class _EditScreenState extends State<EditScreen> {
     // 삽입하는 메서드
     await dbHelper.initDatabase();
     await dbHelper.insertIdeaInfo(ideaInfo);
+  }
+
+  Future setUpdateIdeaInfo(IdeaInfo ideaInfo) async {
+    // 기존 아이디어 정보를 db에 업데이트 시키는 메서드
+    await dbHelper.initDatabase();
+    await dbHelper.updateIdeaInfo(ideaInfo);
   }
 
   void initClickStatus() {

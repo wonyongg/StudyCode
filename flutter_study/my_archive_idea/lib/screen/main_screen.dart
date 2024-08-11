@@ -46,14 +46,55 @@ class _MainScreenState extends State<MainScreen> {
         child: ListView.builder(
           itemCount: listIdeaInfo.length,
           itemBuilder: (context, index) {
-            return listItem(index);
+            return GestureDetector(
+              child: listItem(index),
+              onTap: () async {
+                var result = await Navigator.pushNamed(context, '/detail', arguments: listIdeaInfo[index]);
+                if (result != null) {
+                  String msg = "";
+
+                  if (result == 'update') {
+                    // 수정 완료 (update)
+                    msg = '아이디어가 수정되었습니다.';
+                  } else if (result == 'delete') {
+                    // 삭제 완료 (delete)
+                    msg = '아이디어가 삭제되었습니다.';
+                  }
+                  // refresh list
+                  getIdeaInfo();
+
+                  // show snackBar
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(msg),
+                      ),
+                    );
+                  }
+                }
+              },
+            );
           },
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           // 새 아이디어 작성 화면으로 이동
-          Navigator.pushNamed(context, '/edit');
+          var result = await Navigator.pushNamed(context, '/edit');
+
+          // A -> B -> A 화면으로 돌아 왔을 때(B로부터 결과값을 전달 받았을 떄)
+          if (result != null) {
+            // 아이디어 리스트 다시 불러오기
+            getIdeaInfo();
+            // 아이디어 작성이 완료되었다는 스낵바 메시지 띄우기
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('새로운 아이디어가 추가되었습니다.'),
+                ),
+              );
+            }
+          }
         },
         child: Image.asset(
           'assets/idea.png',
@@ -93,8 +134,8 @@ class _MainScreenState extends State<MainScreen> {
               margin: EdgeInsets.only(right: 16, bottom: 8),
               child: Text(
                 DateFormat("yyyy.MM.dd HH:mm").format(
-                    DateTime.fromMillisecondsSinceEpoch(listIdeaInfo[index].createdAt)
-                ),
+                    DateTime.fromMillisecondsSinceEpoch(
+                        listIdeaInfo[index].createdAt)),
                 style: TextStyle(color: Color(0xffaeaeae), fontSize: 10),
               ),
             ),
