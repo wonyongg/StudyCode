@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -40,6 +41,7 @@ class _MainscreenState extends State<MainScreen> {
             child: Container(
               margin: EdgeInsets.all(16),
               child: Stack(
+                alignment: Alignment.bottomCenter,
                 children: [
                   // 이미지
                   Container(
@@ -59,6 +61,43 @@ class _MainscreenState extends State<MainScreen> {
                           ),
                   ),
                   // 반투명 검정 UI
+                  Container(
+                    width: double.infinity,
+                    height: 57,
+                    decoration: ShapeDecoration(
+                      color: Colors.black.withOpacity(0.7),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      )),
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.all(8),
+                      child: Column(
+                        children: [
+                          Text(
+                            newsItem['title'],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 5,),
+                          Align(
+                            child: Text(
+                              formatDate(newsItem['publishedAt']),
+                              style: TextStyle(color: Colors.white, fontSize: 10),
+                            ),
+                            alignment: Alignment.bottomRight,
+                          )
+                        ],
+                      ),
+                    ),
+                  )
                   // 하얀색 뉴스 제목, 일자, 텍스트
                 ],
               ),
@@ -67,6 +106,13 @@ class _MainscreenState extends State<MainScreen> {
         },
       ),
     );
+  }
+
+  String formatDate(String dateString) {
+    final dateTime = DateTime.parse(dateString);
+    var dateFormat = DateFormat('yyyy.MM.dd HH:mm');
+
+    return dateFormat.format(dateTime);
   }
 
   Future getNewsInfo() async {
