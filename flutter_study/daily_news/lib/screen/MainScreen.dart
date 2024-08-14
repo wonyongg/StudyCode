@@ -8,10 +8,10 @@ class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainscreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainscreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> {
   List<dynamic> newsInfoList = [];
 
   @override
@@ -75,6 +75,7 @@ class _MainscreenState extends State<MainScreen> {
                     child: Container(
                       margin: EdgeInsets.all(8),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             newsItem['title'],
@@ -102,6 +103,9 @@ class _MainscreenState extends State<MainScreen> {
                 ],
               ),
             ),
+            onTap: () {
+              Navigator.pushNamed(context, '/detail', arguments: newsItem);
+            },
           );
         },
       ),
@@ -125,7 +129,10 @@ class _MainscreenState extends State<MainScreen> {
       final response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
-        newsInfoList = responseData['articles'];
+
+        setState(() {
+          newsInfoList = responseData['articles'];
+        });
 
         // debug
         newsInfoList.forEach(
